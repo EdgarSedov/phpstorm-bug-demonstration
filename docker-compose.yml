@@ -1,0 +1,24 @@
+version: "3.8"
+
+services:
+  php:
+    build:
+      context: docker
+      dockerfile: app-fpm/Dockerfile
+      target: local
+      args:
+        PHP_VERSION: 8.1
+        TZ: UTC
+        EXT_IGBINARY_VERSION: 3.2.7
+        EXT_REDIS_VERSION: 5.3.6
+        COMPOSER_VERSION: 2.2.5
+        XDEBUG_VERSION: 3.1.2
+        USER_UID: ${USER_UID:-1000}
+    command: ["php-fpm"]
+    stop_signal: SIGTERM
+    user: www-data
+    volumes:
+      - ./src:/var/www/html
+    environment:
+      COMPOSER_MEMORY_LIMIT: 3G
+    restart: always
